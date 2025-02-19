@@ -10,6 +10,6 @@ Requirements for the qt6 version:
 
 This application is just an attempt, and the user must know what to manage systemd. Usually, the commands stop, start, disable, mask, etc. are straightforward to understand.
 
-Just execute the file systemd-services-qt6.py. 
+Just execute the file systemd-services-qt6.py. This application uses only the command line program systemctl.
 
 ![My image](https://github.com/frank038/systemd-services/blob/main/screenshot01.png)
