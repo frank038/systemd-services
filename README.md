@@ -8,7 +8,7 @@ Requirements for the qt6 version:
 - pyqt6
 - systemctl and pkexec
 
-This application is just an attempt, and the user must know what to manage systemd. Usually, the commands stop, start, disable, mask, etc. are straightforward to understand.
+This application is just an attempt, and the user must know how to manage systemd. Usually, the commands stop, start, disable, mask, etc. are straightforward to understand.
 
 Just execute the file systemd-services-qt6.py. This application uses only the command line program systemctl.
 
