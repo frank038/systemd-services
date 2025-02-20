@@ -13,6 +13,8 @@ This application is just an attempt, and the user must know how to manage system
 
 Just execute the file systemd-services-qt6.py. This application uses only the command line program systemctl.
 
+It seems a services should be first disabled, then stopped (and viceversa). 
+
 ![My image](https://github.com/frank038/systemd-services/blob/main/screenshot02.png)
 
 ![My image](https://github.com/frank038/systemd-services/blob/main/screenshot01.png)
