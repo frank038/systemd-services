@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# version 0.4
+# version 0.4.1
 
 USE_STATIC = 1 # 0: do not search for services in static state; 1: does
 BUTTON_SIZE = 48
@@ -373,7 +373,7 @@ class serviceDialog(Gtk.Window):
         self.grid.attach(lbl_sn,0,0,1,1)
         lbl_sn_name = Gtk.Label(label=self.data[0])
         lbl_sn_name.props.halign = True
-        self.grid.attach(lbl_sn_name,1,0,1,1)
+        self.grid.attach(lbl_sn_name,1,0,30,1)
         
         lbl_desc = Gtk.Label(label=" Description: ")
         lbl_desc.props.halign = True
@@ -439,16 +439,17 @@ class serviceDialog(Gtk.Window):
         except:
             pass
         
-        _actions = ["Enable", "Disable", "Mask", "Unmask"]
+        _actions = ["Start", "Stop", "Restart", "Reload", "Enable", "Disable", "Mask", "Unmask"]
+        # _actions = ["Enable", "Disable", "Mask", "Unmask"]
         
-        if can_reload:
-            _actions.insert(0,"Reload")
-        if can_start and can_stop:
-            _actions.insert(0,"Restart")
-        if can_stop:
-            _actions.insert(0,"Stop")
-        if can_start:
-            _actions.insert(0,"Start")
+        # if can_reload:
+            # _actions.insert(0,"Reload")
+        # if can_start and can_stop:
+            # _actions.insert(0,"Restart")
+        # if can_stop:
+            # _actions.insert(0,"Stop")
+        # if can_start:
+            # _actions.insert(0,"Start")
         
         lbl_action = Gtk.Label(label=" Action: ")
         lbl_action.props.halign = True
