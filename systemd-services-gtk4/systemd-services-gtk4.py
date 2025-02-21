@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# version 0.2.1
+# version 0.3
 
 USE_STATIC = 1 # 0: do not search for services in static state; 1: does
 BUTTON_SIZE = 48
@@ -13,7 +13,7 @@ import sys,os
 import subprocess
 import gi
 gi.require_version('Gtk', '4.0')
-from gi.repository import Gtk
+from gi.repository import Gtk,Pango
 
 MY_HOME = os.path.expanduser('~')
 
@@ -380,6 +380,8 @@ class serviceDialog(Gtk.Window):
         self.grid.attach(lbl_desc,0,1,1,1)
         lbl_desc_desc = Gtk.Label(label="")
         lbl_desc_desc.props.halign = True
+        lbl_desc_desc.set_wrap(True)
+        lbl_desc_desc.set_wrap_mode(Pango.WrapMode.WORD_CHAR)
         self.grid.attach(lbl_desc_desc,1,1,30,1)
         
         lbl_state = Gtk.Label(label=" State: ")
