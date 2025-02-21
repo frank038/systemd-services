@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# version 0.3
+# version 0.4
 
 USE_STATIC = 1 # 0: do not search for services in static state; 1: does
 BUTTON_SIZE = 48
@@ -445,7 +445,9 @@ class serviceDialog(Gtk.Window):
             _actions.insert(0,"Reload")
         if can_start and can_stop:
             _actions.insert(0,"Restart")
+        if can_stop:
             _actions.insert(0,"Stop")
+        if can_start:
             _actions.insert(0,"Start")
         
         lbl_action = Gtk.Label(label=" Action: ")
