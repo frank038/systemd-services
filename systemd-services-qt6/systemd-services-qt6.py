@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# version 0.1
+# version 0.3
 
 USE_STATIC = 1 # 0: do not search for services in static state; 1: does
 use_font_size = 0 # 0: use system default font size; any number: use this value
@@ -327,9 +327,9 @@ class MainWin(QWidget):
     
     def on_info_service(self):
         data = self.sender().uservice
-        if data[2] == "disabled":
-            MyDialog("Info", "Not possible.",self)
-            return
+        # if data[2] == "disabled":
+            # MyDialog("Info", "Not possible.",self)
+            # return
         serviceDialog(data, self)
         
     def on_reload(self):
@@ -375,29 +375,80 @@ class serviceDialog(QDialog):
         label0_data = QLabel(data[0])
         grid.addWidget(label0_data, 1, 1, Qt.AlignmentFlag.AlignLeft)
         #
-        label1 = QLabel("<i>State </i>")
-        grid.addWidget(label1, 2, 0, Qt.AlignmentFlag.AlignLeft)
+        lbl_desc = QLabel("<i>Description: </i>")
+        grid.addWidget(lbl_desc, 2, 0, Qt.AlignmentFlag.AlignLeft)
+        lbl_desc_desc = QLabel()
+        lbl_desc_desc.setWordWrap(True)
+        grid.addWidget(lbl_desc_desc, 2, 1, Qt.AlignmentFlag.AlignLeft)
+        #
+        label1 = QLabel("<i>State: </i>")
+        grid.addWidget(label1, 3, 0, Qt.AlignmentFlag.AlignLeft)
         label1_data = QLabel(data[1])
-        grid.addWidget(label1_data, 2, 1, Qt.AlignmentFlag.AlignLeft)
+        grid.addWidget(label1_data, 3, 1, Qt.AlignmentFlag.AlignLeft)
         #
         # label2 = QLabel("<i>Status: </i>")
-        # grid.addWidget(label2, 3, 0, Qt.AlignmentFlag.AlignLeft)
+        # grid.addWidget(label2, 4, 0, Qt.AlignmentFlag.AlignLeft)
         # label2_data = QLabel(data[2])
-        # grid.addWidget(label2_data, 3, 1, Qt.AlignmentFlag.AlignLeft)
-        ####
-        label3 = QLabel("<i>Action on state: </i>")
-        grid.addWidget(label3, 4, 0, Qt.AlignmentFlag.AlignLeft)
-        label3_data = QLabel("")
-        grid.addWidget(label3_data, 4, 1, Qt.AlignmentFlag.AlignLeft)
+        # grid.addWidget(label2_data, 4, 1, Qt.AlignmentFlag.AlignLeft)
+        #
+        lbl_is_active = QLabel("<i>Is active: </i>")
+        grid.addWidget(lbl_is_active, 4, 0, Qt.AlignmentFlag.AlignLeft)
+        lbl_is_active_state = QLabel()
+        grid.addWidget(lbl_is_active_state, 4, 1, Qt.AlignmentFlag.AlignLeft)
+        #
+        _description = ""
+        active_state = -1
+        can_start = None
+        can_stop = None
+        can_reload = None
+        try:
+            # can_start = subprocess.check_output(["systemctl","show","--property=CanStart", self.data[0]]).decode().strip("\n")
+            # can_stop = subprocess.check_output(["systemctl","show","--property=CanStop", self.data[0]]).decode().strip("\n")
+            # can_reload = subprocess.check_output(["systemctl","show","--property=CanReload", self.data[0]]).decode().strip("\n")
+            can_actions = subprocess.check_output(["systemctl","show","--property=Description,ActiveState,CanStart,CanStop,CanReload", self.data[0]]).decode()
+            tmp_actions = can_actions.split("\n")
+            tmp_actions.remove('')
+            _description = tmp_actions[0].split("=")[1]
+            lbl_desc_desc.setText(_description)
+            if "ActiveState=active" in tmp_actions:
+                active_state = 1
+                lbl_is_active_state.setText("active")
+            elif "ActiveState=inactive" in tmp_actions:
+                active_state = 0
+                lbl_is_active_state.setText("inactive")
+            if "CanStart=yes" in tmp_actions:
+                can_start = 1
+            if "CanStop=yes" in tmp_actions:
+                can_stop = 1
+            if "CanReload=yes" in tmp_actions:
+                can_reload = 1
+        except:
+            pass
+        
+        _actions = ["Enable", "Disable", "Mask", "Unmask"]
+        
+        if can_reload:
+            _actions.insert(0,"Reload")
+        if can_start and can_stop:
+            _actions.insert(0,"Restart")
+            _actions.insert(0,"Stop")
+            _actions.insert(0,"Start")
+        
+        #
+        label3 = QLabel("<i>Action: </i>")
+        grid.addWidget(label3, 5, 0, Qt.AlignmentFlag.AlignLeft)
+        # label3_data = QLabel("")
+        # grid.addWidget(label3_data, 5, 1, Qt.AlignmentFlag.AlignLeft)
         #
         self.action_combo = QComboBox()
-        self.action_combo.addItems(["Start","Restart","Reload","Stop","Enable", "Disable", "Mask", "Unmask"])
-        self.action_combo.setCurrentIndex(0)
-        grid.addWidget(self.action_combo, 4, 1, Qt.AlignmentFlag.AlignLeft)
+        # self.action_combo.addItems(["Start","Restart","Reload","Stop","Enable", "Disable", "Mask", "Unmask"])
+        self.action_combo.addItems(_actions)
+        # self.action_combo.setCurrentIndex(0)
+        grid.addWidget(self.action_combo, 5, 1, Qt.AlignmentFlag.AlignLeft)
         #
         action_btn = QPushButton("APPLY")
         action_btn.clicked.connect(self.on_apply)
-        grid.addWidget(action_btn, 4, 2, Qt.AlignmentFlag.AlignLeft)
+        grid.addWidget(action_btn, 5, 2, Qt.AlignmentFlag.AlignLeft)
         #
         button_ok = QPushButton("   Close   ")
         grid.addWidget(button_ok, 12, 0, 1, 2, Qt.AlignmentFlag.AlignHCenter)
