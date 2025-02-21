@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# version 0.2
+# version 0.2.1
 
 USE_STATIC = 1 # 0: do not search for services in static state; 1: does
 BUTTON_SIZE = 48
@@ -13,7 +13,7 @@ import sys,os
 import subprocess
 import gi
 gi.require_version('Gtk', '4.0')
-from gi.repository import Gtk,Gio
+from gi.repository import Gtk
 
 MY_HOME = os.path.expanduser('~')
 
@@ -210,6 +210,7 @@ class MainWindow(Gtk.ApplicationWindow):
         self.old_width = self.get_width()
         self.old_height = self.get_height()
         aa.disconnect(self.surface_id_connect)
+        self.surface_id_connect = None
     
     def on_show(self, w):
         self._surface = self.get_surface()
