@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# version 0.3
+# version 0.4
 
 USE_STATIC = 1 # 0: do not search for services in static state; 1: does
 use_font_size = 0 # 0: use system default font size; any number: use this value
@@ -431,10 +431,11 @@ class serviceDialog(QDialog):
             _actions.insert(0,"Reload")
         if can_start and can_stop:
             _actions.insert(0,"Restart")
+        if can_stop:
             _actions.insert(0,"Stop")
+        if can_start:
             _actions.insert(0,"Start")
         
-        #
         label3 = QLabel("<i>Action: </i>")
         grid.addWidget(label3, 5, 0, Qt.AlignmentFlag.AlignLeft)
         # label3_data = QLabel("")
